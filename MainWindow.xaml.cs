@@ -61,10 +61,17 @@ namespace DecadeViewer
             {
                 // too lazy to figure out conditional specifying days but i don't want the trailing digits from the default
                 // if i could just have the whole number of hours colon minutes colon seconds i would
-                WeightType.Duration => TimeSpan.FromMilliseconds(weight).ToString("g").Split(".")[0],
+                WeightType.Duration => FormattedMilliseconds(weight),
                 // WeightType.Rating => "", // todo: track songs per decade to calculate average rating
                 _ => $"{(int)weight}"
             };
+        }
+        public static string FormattedMilliseconds(double ms)
+        {
+            TimeSpan ts = TimeSpan.FromMilliseconds(ms);
+            int totalHours = ts.Days * ts.Hours;
+            string prefix = totalHours > 0 ? $"{totalHours}:" : "";
+            return $"{prefix}{ts.Minutes:00}:{ts.Seconds:00}";
         }
         public void Add(string filePath)
         {
