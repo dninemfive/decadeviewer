@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <TextBlock Name="Debug" Panel.ZIndex="2" Text="Test" MaxHeight="40" MaxWidth="40" HorizontalAlignment="Left" VerticalAlignment="Top"></TextBlock>
         <Grid Name="ButtonHolder" Panel.ZIndex="1" Height="40">
             <Grid.RowDefinitions>
                 <RowDefinition/>

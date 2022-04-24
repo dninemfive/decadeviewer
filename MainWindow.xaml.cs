@@ -25,15 +25,6 @@ namespace DecadeViewer
         Dictionary<string, DockPanel> Panels = new();
         HashSet<ProgressBar> ProgressBars = new();
         List<string> CenturiesInOrder = new();
-        int TotalSongNumber
-        {
-            get
-            {
-                int result = ProgressBars.Any() ? (int)ProgressBars.Select(x => x.Value).Aggregate((x, y) => x + y) : 1;
-                foreach (ProgressBar pb in ProgressBars) pb.Maximum = result;
-                return result;
-            }
-        }
         public MainWindow()
         {
             InitializeComponent();         
@@ -47,7 +38,7 @@ namespace DecadeViewer
         {
             TextBlock label = new() { Text = century, HorizontalAlignment = HorizontalAlignment.Right, MinWidth = 100 };
             DockPanel.SetDock(label, Dock.Left);
-            ProgressBar bar = new() { Value = 1, Maximum = TotalSongNumber, HorizontalAlignment = HorizontalAlignment.Left, MinWidth = 100 };
+            ProgressBar bar = new() { Value = 1, Maximum = 1e3, HorizontalAlignment = HorizontalAlignment.Left, MinWidth = 100 };
             ProgressBars.Add(bar);
             DockPanel result = new() { HorizontalAlignment = HorizontalAlignment.Center };
             result.Children.Add(label);
@@ -72,14 +63,19 @@ namespace DecadeViewer
             if(Panels.ContainsKey(century))
             {
                 Panels[century].Children.OfType<ProgressBar>().First().Value += 1;
-                // don't worry, i hate it too
-                _ = TotalSongNumber;
             } else
             {
                 DockPanel ce = CenturyEntry(century);
                 Panels[century] = ce;
                 DecadeList.Items.Insert(CenturiesInOrder.IndexOf(century), ce);
             }
+            SetAllProgressBarsToLargestValue();
+        }
+        public void SetAllProgressBarsToLargestValue()
+        {
+            int max = 0;
+            foreach (ProgressBar pb in ProgressBars) if (pb.Value > max) max = (int)pb.Value;
+            foreach (ProgressBar pb in ProgressBars) pb.Maximum = max;
         }
         // wish i didn't have to copy and paste this code everywhere lmao
         public static IEnumerable<string> AllFilesRecursive(string path)
