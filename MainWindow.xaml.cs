@@ -22,10 +22,10 @@ namespace DecadeViewer
     /// </summary>
     public partial class MainWindow : Window
     {
-        Dictionary<string, DecadeEntry> Panels = new();
-        List<string> DecadesInOrder = new();
+        readonly Dictionary<string, DecadeEntry> DecadeDatabase = new();
+        readonly List<string> DecadesInOrder = new();
         public static MainWindow Instance { get; private set; }
-        public int LargestSongCount => Panels.Values.Select(x => x.SongCount).Max();
+        public int LargestSongCount => DecadeDatabase.Values.Select(x => x.SongCount).Max();
         public MainWindow()
         {
             InitializeComponent();
@@ -49,20 +49,20 @@ namespace DecadeViewer
                 return;
             }
             string decade = Decade(file.Tag.Year);            
-            if(Panels.ContainsKey(decade))
+            if(DecadeDatabase.ContainsKey(decade))
             {
-                Panels[decade].SongCount++;
+                DecadeDatabase[decade].SongCount++;
             } else
             {
                 DecadeEntry de = new(decade);
-                Panels[decade] = de;
+                DecadeDatabase[decade] = de;
                 DecadesInOrder.Add(decade);
                 DecadesInOrder.Sort();
-                DecadeList.Items.Insert(DecadesInOrder.IndexOf(decade), de);
+                DecadeList.Items.Insert(DecadesInOrder.IndexOf(decade), de.Panel);
             }
-            foreach(object item in DecadeList.Items)
+            foreach(DecadeEntry de in DecadeDatabase.Values)
             {
-                if (item is DecadeEntry de) de.ProgressBar.Maximum = LargestSongCount;
+                de.ProgressBar.Maximum = LargestSongCount;
             }
         }
         // wish i didn't have to copy and paste this code everywhere lmao
