@@ -18,11 +18,11 @@ namespace DecadeViewer
             set
             {
                 _songCount = value;
-                ProgressBar.Maximum = _songCount;
+                ProgressBar.Value = _songCount;
                 SongCountLabel.Text = $"{_songCount}";
             }
         }
-        TextBlock DecadeLabel, SongCountLabel;
+        readonly TextBlock DecadeLabel, SongCountLabel;
         public ProgressBar ProgressBar { get; private set; } = null;
         public DockPanel Panel { get; private set; } = new() { HorizontalAlignment = HorizontalAlignment.Stretch };
         public DecadeEntry(string decade)
