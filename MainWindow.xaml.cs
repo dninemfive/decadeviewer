@@ -97,7 +97,7 @@ namespace DecadeViewer
                 DecadeDatabase[decade] = de;
                 DecadesInOrder.Add(decade);
                 DecadesInOrder.Sort();
-                Application.Current.Dispatcher.Invoke(() => DecadeList.Items.Insert(DecadesInOrder.IndexOf(decade), de.Panel));
+                Application.Current.Dispatcher.Invoke(() => DecadeList.Items.Insert(DecadesInOrder.IndexOf(decade), de.Grid));
             }
             foreach(DecadeEntry de in DecadeDatabase.Values)
             {

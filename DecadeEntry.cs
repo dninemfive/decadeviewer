@@ -25,7 +25,7 @@ namespace DecadeViewer
         public string WeightFormatted => MainWindow.Instance.WeightFormat(Weight);
         TextBlock DecadeLabel, SongCountLabel;
         public ProgressBar ProgressBar { get; private set; } = null;
-        public DockPanel Panel { get; private set; } = new() { HorizontalAlignment = HorizontalAlignment.Center };
+        public Grid Grid { get; private set; } = new() { HorizontalAlignment = HorizontalAlignment.Center };
         public DecadeEntry(string decade, double amount)
         {
             Decade = decade;
@@ -34,14 +34,23 @@ namespace DecadeViewer
         }
         private void ConstructorInternal()
         {
-            DecadeLabel = new() { Padding = new(8), Text = Decade, HorizontalAlignment = HorizontalAlignment.Right, MinWidth = 100 };
-            DockPanel.SetDock(DecadeLabel, Dock.Left);
-            Panel.Children.Add(DecadeLabel);
-            SongCountLabel = new() { Padding = new(8), Text = WeightFormatted, HorizontalAlignment = HorizontalAlignment.Left };
-            DockPanel.SetDock(SongCountLabel, Dock.Right);
-            Panel.Children.Add(SongCountLabel);
-            ProgressBar = new() { Value = 1, Maximum = 1000, MinWidth = 1000, HorizontalAlignment = HorizontalAlignment.Stretch };
-            Panel.Children.Add(ProgressBar);
+            DecadeLabel = new() { Padding = new(8), Text = Decade, HorizontalAlignment = HorizontalAlignment.Right };
+            Grid.SetColumn(DecadeLabel, 0);
+            Grid.Children.Add(DecadeLabel);
+
+            SongCountLabel = new() { Padding = new(8), Text = WeightFormatted, HorizontalAlignment = HorizontalAlignment.Right };
+            Grid.SetColumn(SongCountLabel, 2);
+            Grid.Children.Add(SongCountLabel);
+
+            ProgressBar = new() { Value = 1, Maximum = 1000, HorizontalAlignment = HorizontalAlignment.Stretch };
+            Grid.SetColumn(ProgressBar, 1);
+            Grid.Children.Add(ProgressBar);
+
+            // you can't reuse column definition objects.
+            // ...
+            Grid.ColumnDefinitions.Add(new() { Width = new(1,  GridUnitType.Star) });
+            Grid.ColumnDefinitions.Add(new() { Width = new(10, GridUnitType.Star) });
+            Grid.ColumnDefinitions.Add(new() { Width = new(1,  GridUnitType.Star) });
         }
     }
 }
