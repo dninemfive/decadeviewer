@@ -22,30 +22,19 @@ namespace DecadeViewer
     /// </summary>
     public partial class MainWindow : Window
     {
-        Dictionary<string, DockPanel> Panels = new();
-        HashSet<ProgressBar> ProgressBars = new();
-        List<string> CenturiesInOrder = new();
+        Dictionary<string, DecadeEntry> Panels = new();
+        List<string> DecadesInOrder = new();
+        public static MainWindow Instance { get; private set; }
+        public int LargestSongCount => Panels.Values.Select(x => x.SongCount).Max();
         public MainWindow()
         {
-            InitializeComponent();         
+            InitializeComponent();
+            Instance = this;
         }
-        public static string Century(uint year)
+        public static string Decade(uint year)
         {
             if (year == 0) return "uncategorized ";
             return $"{year / 10}0s ";
-        }
-        public DockPanel CenturyEntry(string century)
-        {
-            TextBlock label = new() { Text = century, HorizontalAlignment = HorizontalAlignment.Right, MinWidth = 100 };
-            DockPanel.SetDock(label, Dock.Left);
-            ProgressBar bar = new() { Value = 1, Maximum = 1e3, HorizontalAlignment = HorizontalAlignment.Left, MinWidth = 100 };
-            ProgressBars.Add(bar);
-            DockPanel result = new() { HorizontalAlignment = HorizontalAlignment.Center };
-            result.Children.Add(label);
-            result.Children.Add(bar);
-            CenturiesInOrder.Add(century);
-            CenturiesInOrder = CenturiesInOrder.OrderBy(x => x).ToList();
-            return result;
         }
         public void Add(string filePath)
         {
@@ -59,23 +48,22 @@ namespace DecadeViewer
                 _ = e;
                 return;
             }
-            string century = Century(file.Tag.Year);
-            if(Panels.ContainsKey(century))
+            string decade = Decade(file.Tag.Year);            
+            if(Panels.ContainsKey(decade))
             {
-                Panels[century].Children.OfType<ProgressBar>().First().Value += 1;
+                Panels[decade].SongCount++;
             } else
             {
-                DockPanel ce = CenturyEntry(century);
-                Panels[century] = ce;
-                DecadeList.Items.Insert(CenturiesInOrder.IndexOf(century), ce);
+                DecadeEntry de = new(decade);
+                Panels[decade] = de;
+                DecadesInOrder.Add(decade);
+                DecadesInOrder.Sort();
+                DecadeList.Items.Insert(DecadesInOrder.IndexOf(decade), de);
             }
-            SetAllProgressBarsToLargestValue();
-        }
-        public void SetAllProgressBarsToLargestValue()
-        {
-            int max = 0;
-            foreach (ProgressBar pb in ProgressBars) if (pb.Value > max) max = (int)pb.Value;
-            foreach (ProgressBar pb in ProgressBars) pb.Maximum = max;
+            foreach(object item in DecadeList.Items)
+            {
+                if (item is DecadeEntry de) de.ProgressBar.Maximum = LargestSongCount;
+            }
         }
         // wish i didn't have to copy and paste this code everywhere lmao
         public static IEnumerable<string> AllFilesRecursive(string path)
