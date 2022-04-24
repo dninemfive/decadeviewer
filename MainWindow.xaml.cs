@@ -59,8 +59,10 @@ namespace DecadeViewer
         {
             return WeightType switch
             {
-                WeightType.Duration => TimeSpan.FromMilliseconds(weight).ToString(@"h\:mm\:ss"),
-                WeightType.Rating => "", // todo: track songs per decade to calculate average rating
+                // too lazy to figure out conditional specifying days but i don't want the trailing digits from the default
+                // if i could just have the whole number of hours colon minutes colon seconds i would
+                WeightType.Duration => TimeSpan.FromMilliseconds(weight).ToString("g").Split(".")[0],
+                // WeightType.Rating => "", // todo: track songs per decade to calculate average rating
                 _ => $"{(int)weight}"
             };
         }
