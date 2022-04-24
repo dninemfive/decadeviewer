@@ -7,14 +7,15 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <TextBlock Name="Debug" Panel.ZIndex="2" Text="Test" MaxHeight="40" MaxWidth="40" HorizontalAlignment="Left" VerticalAlignment="Top"></TextBlock>
-        <Grid Name="ButtonHolder" Panel.ZIndex="1" Height="40">
+        <Grid Name="ButtonHolder" Panel.ZIndex="1" VerticalAlignment="Center">
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
-            <TextBox Name="FolderEntry" Grid.Row="0" Text="C:/Users/dninemfive/Music/Files/" HorizontalAlignment="Center"></TextBox>
-            <Button Click="Button_Click" Grid.Row="1" Content="Click" MaxWidth="100"></Button>            
+            <TextBox Name="FolderEntry" Grid.Row="0" Text="C:/Users/dninemfive/Music/Files/" HorizontalAlignment="Center"/>
+            <Button Click="Button_Click" Grid.Row="1" Content="Click" MaxWidth="100"/>
+            <ComboBox Name="WeightDropdown" Grid.Row="2" MaxWidth="100"/>
         </Grid>
         <ScrollViewer>
             <ListView Name="DecadeList">

@@ -14,7 +14,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TagLib;
-
+/**
+ * TODO: 
+ * - dropdown: profile songs/albums/ratings/playtime
+ * - dropdown: 1/2/5/10 year periods
+ * - async loading
+ * - re-profile without restarting
+ */
 namespace DecadeViewer
 {
     /// <summary>
@@ -24,17 +30,31 @@ namespace DecadeViewer
     {
         readonly Dictionary<string, DecadeEntry> DecadeDatabase = new();
         readonly List<string> DecadesInOrder = new();
+        readonly HashSet<(string album, string albumArtist)> Albums = new();
+        WeightType WeightType => (WeightType)WeightDropdown.SelectedItem;
         public static MainWindow Instance { get; private set; }
-        public int LargestSongCount => DecadeDatabase.Values.Select(x => x.SongCount).Max();
+        public double LargestDecadeWeight => DecadeDatabase.Values.Select(x => x.Weight).Max();
         public MainWindow()
         {
             InitializeComponent();
             Instance = this;
+            WeightDropdown.ItemsSource = Enum.GetValues(typeof(WeightType));
         }
-        public static string Decade(uint year)
+        public static string Decade(TagLib.File file)
         {
+            uint year = file.Tag.Year;
             if (year == 0) return "uncategorized ";
             return $"{year / 10}0s ";
+        }
+        public double Weight(TagLib.File file)
+        {
+            return WeightType switch
+            {
+                WeightType.OnePerAlbum => Albums.Contains((file.Tag.Album, file.Tag.JoinedAlbumArtists)) ? 1 : 0,
+                WeightType.Rating => TagLib.Id3v2.PopularimeterFrame.Get(file.Tag as TagLib.Id3v2.Tag, default, false).Rating,
+                WeightType.Playtime => file.Properties.Duration.TotalMilliseconds,
+                _ => 1
+            };
         }
         public void Add(string filePath)
         {
@@ -48,13 +68,15 @@ namespace DecadeViewer
                 _ = e;
                 return;
             }
-            string decade = Decade(file.Tag.Year);            
-            if(DecadeDatabase.ContainsKey(decade))
+            string decade = Decade(file);
+            double weight = Weight(file);
+            if(WeightType is WeightType.OnePerAlbum) Albums.Add((file.Tag.Album, file.Tag.JoinedAlbumArtists));
+            if (DecadeDatabase.ContainsKey(decade))
             {
-                DecadeDatabase[decade].SongCount++;
+                DecadeDatabase[decade].Weight += weight;
             } else
             {
-                DecadeEntry de = new(decade);
+                DecadeEntry de = new(decade, weight);
                 DecadeDatabase[decade] = de;
                 DecadesInOrder.Add(decade);
                 DecadesInOrder.Sort();
@@ -62,7 +84,7 @@ namespace DecadeViewer
             }
             foreach(DecadeEntry de in DecadeDatabase.Values)
             {
-                de.ProgressBar.Maximum = LargestSongCount;
+                de.ProgressBar.Maximum = LargestDecadeWeight;
             }
         }
         // wish i didn't have to copy and paste this code everywhere lmao
@@ -96,4 +118,5 @@ namespace DecadeViewer
             foreach (string s in AllFilesRecursive(path)) Add(s);            
         }
     }
+    public enum WeightType { OnePerSong, OnePerAlbum, Rating, Playtime }
 }
