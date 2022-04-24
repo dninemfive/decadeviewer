@@ -19,9 +19,10 @@ namespace DecadeViewer
             {
                 _weight = value;
                 ProgressBar.Value = _weight;
-                SongCountLabel.Text = $"{_weight}";
+                SongCountLabel.Text = WeightFormatted;
             }
         }
+        public string WeightFormatted => MainWindow.Instance.WeightFormat(Weight);
         readonly TextBlock DecadeLabel, SongCountLabel;
         public ProgressBar ProgressBar { get; private set; } = null;
         public DockPanel Panel { get; private set; } = new() { HorizontalAlignment = HorizontalAlignment.Center };
@@ -32,7 +33,7 @@ namespace DecadeViewer
             DecadeLabel = new() { Padding = new(8), Text = Decade, HorizontalAlignment = HorizontalAlignment.Right, MinWidth = 100 };
             DockPanel.SetDock(DecadeLabel, Dock.Left);
             Panel.Children.Add(DecadeLabel);
-            SongCountLabel = new() { Padding = new(8), Text = "1", HorizontalAlignment = HorizontalAlignment.Left };
+            SongCountLabel = new() { Padding = new(8), Text = WeightFormatted, HorizontalAlignment = HorizontalAlignment.Left };
             DockPanel.SetDock(SongCountLabel, Dock.Right);
             Panel.Children.Add(SongCountLabel);
             ProgressBar = new() { Value = 1, Maximum = 1000, MinWidth = 1000, HorizontalAlignment = HorizontalAlignment.Stretch };

@@ -52,8 +52,17 @@ namespace DecadeViewer
             {
                 WeightType.OnePerAlbum => Albums.Contains((file.Tag.Album, file.Tag.JoinedAlbumArtists)) ? 1 : 0,
                 WeightType.Rating => file.Tag is TagLib.Id3v2.Tag id3v2 ? TagLib.Id3v2.PopularimeterFrame.Get(id3v2, default, false).Rating : 0,
-                WeightType.Playtime => file.Properties.Duration.TotalMilliseconds,
+                WeightType.Duration => file.Properties.Duration.TotalMilliseconds,
                 _ => 1
+            };
+        }
+        public string WeightFormat(double weight)
+        {
+            return WeightType switch
+            {
+                WeightType.Duration => TimeSpan.FromMilliseconds(weight).ToString(@"h\:mm\:ss"),
+                WeightType.Rating => "", // todo: track songs per decade to calculate average rating
+                _ => $"{(int)weight}"
             };
         }
         public void Add(string filePath)
@@ -118,5 +127,5 @@ namespace DecadeViewer
             foreach (string s in AllFilesRecursive(path)) Add(s);            
         }
     }
-    public enum WeightType { OnePerSong, OnePerAlbum, Rating, Playtime }
+    public enum WeightType { OnePerSong, OnePerAlbum, Rating, Duration }
 }
