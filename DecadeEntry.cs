@@ -25,7 +25,7 @@ namespace DecadeViewer
         public string WeightFormatted => MainWindow.Instance.WeightFormat(Weight);
         TextBlock DecadeLabel, SongCountLabel;
         public ProgressBar ProgressBar { get; private set; } = null;
-        public Grid Grid { get; private set; } = new() { HorizontalAlignment = HorizontalAlignment.Center };
+        public Grid Grid { get; private set; } = new() { HorizontalAlignment = HorizontalAlignment.Stretch };
         public DecadeEntry(string decade, double amount)
         {
             Decade = decade;
@@ -42,14 +42,16 @@ namespace DecadeViewer
             Grid.SetColumn(SongCountLabel, 2);
             Grid.Children.Add(SongCountLabel);
 
-            ProgressBar = new() { Value = 1, Maximum = 1000, HorizontalAlignment = HorizontalAlignment.Stretch };
+            ProgressBar = new() { Value = 1, Maximum = 1000 };
             Grid.SetColumn(ProgressBar, 1);
             Grid.Children.Add(ProgressBar);
 
             // you can't reuse column definition objects.
             // ...
             Grid.ColumnDefinitions.Add(new() { Width = new(1,  GridUnitType.Star) });
-            Grid.ColumnDefinitions.Add(new() { Width = new(10, GridUnitType.Star) });
+            // i've been lied to :gone:
+            // genuinely why tf won't the progress bar fill tho
+            Grid.ColumnDefinitions.Add(new() { Width = GridLength.Auto });
             Grid.ColumnDefinitions.Add(new() { Width = new(1,  GridUnitType.Star) });
         }
     }
