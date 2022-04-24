@@ -16,9 +16,8 @@ using System.Windows.Shapes;
 using TagLib;
 /**
  * TODO: 
- * - dropdown: profile songs/albums/ratings/playtime
+ * - fix weighting by album count / aggregate rating
  * - dropdown: 1/2/5/10 year periods
- * - async loading
  * - re-profile without restarting
  */
 namespace DecadeViewer
@@ -79,7 +78,7 @@ namespace DecadeViewer
             }
             string decade = Decade(file);
             double weight = Weight(file);
-            if(WeightType is WeightType.OnePerAlbum) Albums.Add((file.Tag.Album, file.Tag.JoinedAlbumArtists));
+            if (WeightType is WeightType.OnePerAlbum) Albums.Add((file.Tag.Album, file.Tag.JoinedAlbumArtists));
             if (DecadeDatabase.ContainsKey(decade))
             {
                 DecadeDatabase[decade].Weight += weight;
@@ -89,11 +88,11 @@ namespace DecadeViewer
                 DecadeDatabase[decade] = de;
                 DecadesInOrder.Add(decade);
                 DecadesInOrder.Sort();
-                DecadeList.Items.Insert(DecadesInOrder.IndexOf(decade), de.Panel);
+                Application.Current.Dispatcher.Invoke(() => DecadeList.Items.Insert(DecadesInOrder.IndexOf(decade), de.Panel));
             }
             foreach(DecadeEntry de in DecadeDatabase.Values)
             {
-                de.ProgressBar.Maximum = LargestDecadeWeight;
+                Application.Current.Dispatcher.Invoke(() => de.ProgressBar.Maximum = LargestDecadeWeight);
             }
         }
         // wish i didn't have to copy and paste this code everywhere lmao
@@ -120,11 +119,15 @@ namespace DecadeViewer
             foreach (string file in Directory.EnumerateFiles(path)) yield return file;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private async void Button_Profile(object sender, RoutedEventArgs e)
         {
             string path = FolderEntry.Text;
             ButtonHolder.Visibility = Visibility.Hidden;
-            foreach (string s in AllFilesRecursive(path)) Add(s);            
+            await Task.Run(() => ProfileInternal(path));
+        }
+        private void ProfileInternal(string path)
+        {
+            foreach (string s in AllFilesRecursive(path)) Application.Current.Dispatcher.Invoke(() => Add(s));
         }
     }
     public enum WeightType { OnePerSong, OnePerAlbum, Rating, Duration }
