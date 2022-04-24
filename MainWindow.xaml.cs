@@ -51,7 +51,7 @@ namespace DecadeViewer
             return WeightType switch
             {
                 WeightType.OnePerAlbum => Albums.Contains((file.Tag.Album, file.Tag.JoinedAlbumArtists)) ? 1 : 0,
-                WeightType.Rating => TagLib.Id3v2.PopularimeterFrame.Get(file.Tag as TagLib.Id3v2.Tag, default, false).Rating,
+                WeightType.Rating => file.Tag is TagLib.Id3v2.Tag id3v2 ? TagLib.Id3v2.PopularimeterFrame.Get(id3v2, default, false).Rating : 0,
                 WeightType.Playtime => file.Properties.Duration.TotalMilliseconds,
                 _ => 1
             };

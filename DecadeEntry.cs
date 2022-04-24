@@ -11,15 +11,15 @@ namespace DecadeViewer
     class DecadeEntry : UserControl
     {
         public string Decade { get; private set; }  = null;
-        private double _songCount = 1;
+        private double _weight = 1;
         public double Weight
         {
-            get => _songCount;
+            get => _weight;
             set
             {
-                _songCount = value;
-                ProgressBar.Value = _songCount;
-                SongCountLabel.Text = $"{_songCount}";
+                _weight = value;
+                ProgressBar.Value = _weight;
+                SongCountLabel.Text = $"{_weight}";
             }
         }
         readonly TextBlock DecadeLabel, SongCountLabel;
@@ -28,7 +28,7 @@ namespace DecadeViewer
         public DecadeEntry(string decade, double amount)
         {
             Decade = decade;
-            Weight = amount;
+            _weight = amount;
             DecadeLabel = new() { Padding = new(8), Text = Decade, HorizontalAlignment = HorizontalAlignment.Right, MinWidth = 100 };
             DockPanel.SetDock(DecadeLabel, Dock.Left);
             Panel.Children.Add(DecadeLabel);
