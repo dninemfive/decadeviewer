@@ -48,11 +48,11 @@ namespace DecadeViewer
 
             // you can't reuse column definition objects.
             // ...
-            Grid.ColumnDefinitions.Add(new() { Width = new(1,  GridUnitType.Star) });
+            Grid.ColumnDefinitions.Add(new() { Width = new(1,  GridUnitType.Star), MinWidth = 100 });
             // i've been lied to :gone:
             // genuinely why tf won't the progress bar fill tho
-            Grid.ColumnDefinitions.Add(new() { Width = GridLength.Auto });
-            Grid.ColumnDefinitions.Add(new() { Width = new(1,  GridUnitType.Star) });
+            Grid.ColumnDefinitions.Add(new() { Width = GridLength.Auto, MinWidth = 1000 });
+            Grid.ColumnDefinitions.Add(new() { Width = new(1,  GridUnitType.Star), MinWidth = 100 });
         }
     }
 }
