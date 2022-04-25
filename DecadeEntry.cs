@@ -15,12 +15,18 @@ namespace DecadeViewer
         public double Weight
         {
             get => _weight;
-            set
+            private set
             {
                 _weight = value;
                 Application.Current.Dispatcher.Invoke(() => ProgressBar.Value = _weight);
                 Application.Current.Dispatcher.Invoke(() => SongCountLabel.Text = WeightFormatted);
             }
+        }
+        public int SongCount { get; private set; }
+        public void AddSong(double weight)
+        {
+            Weight += weight;
+            SongCount++;
         }
         public string WeightFormatted => MainWindow.Instance.WeightFormat(Weight);
         TextBlock DecadeLabel, SongCountLabel;

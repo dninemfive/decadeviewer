@@ -55,14 +55,12 @@ namespace DecadeViewer
                 _ => 1
             };
         }
-        public string WeightFormat(double weight)
+        public string WeightFormat(double weight, int songCount)
         {
             return WeightType switch
             {
-                // too lazy to figure out conditional specifying days but i don't want the trailing digits from the default
-                // if i could just have the whole number of hours colon minutes colon seconds i would
                 WeightType.Duration => FormattedMilliseconds(weight),
-                // WeightType.Rating => "", // todo: track songs per decade to calculate average rating
+                WeightType.Rating => $"{weight/songCount}",
                 _ => $"{(int)weight}"
             };
         }
@@ -90,7 +88,7 @@ namespace DecadeViewer
             if (WeightType is WeightType.OnePerAlbum) Albums.Add((file.Tag.Album, file.Tag.JoinedAlbumArtists));
             if (DecadeDatabase.ContainsKey(decade))
             {
-                DecadeDatabase[decade].Weight += weight;
+                DecadeDatabase[decade].AddSong(weight);
             } else
             {
                 DecadeEntry de = new(decade, weight);
