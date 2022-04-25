@@ -12,6 +12,7 @@ namespace DecadeViewer
         public static readonly WeightMethod Song, Album, Rating, Duration;
         public static readonly List<WeightMethod> AllMethods = new() { Song, Album, Duration, Rating };
         public virtual string Name { get; }
+        public override string ToString() => Name;
         public abstract double Weight(TagLib.File file);
         public abstract string Format(DecadeEntry de);
     }

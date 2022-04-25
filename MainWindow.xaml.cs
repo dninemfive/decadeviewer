@@ -29,14 +29,14 @@ namespace DecadeViewer
     {
         readonly Dictionary<string, DecadeEntry> DecadeDatabase = new();
         readonly List<string> DecadesInOrder = new();
-        WeightType WeightType => (WeightType)WeightDropdown.SelectedItem;
+        WeightMethod WeightMethod => WeightDropdown.SelectedItem as WeightMethod;
         public static MainWindow Instance { get; private set; }
         public double LargestDecadeWeight => DecadeDatabase.Values.Select(x => x.Weight).Max();
         public MainWindow()
         {
             InitializeComponent();
             Instance = this;
-            WeightDropdown.ItemsSource = Enum.GetValues(typeof(WeightType));
+            WeightDropdown.ItemsSource = WeightMethod.AllMethods;
         }
         public static string Decade(TagLib.File file)
         {
@@ -57,8 +57,7 @@ namespace DecadeViewer
                 return;
             }
             string decade = Decade(file);
-            double weight = Weight(file);
-            if (WeightType is WeightType.OnePerAlbum) Albums.Add((file.Tag.Album, file.Tag.JoinedAlbumArtists));
+            double weight = WeightMethod.Weight(file);
             if (DecadeDatabase.ContainsKey(decade))
             {
                 DecadeDatabase[decade].AddSong(weight);
@@ -110,5 +109,4 @@ namespace DecadeViewer
             foreach (string s in AllFilesRecursive(path)) Application.Current.Dispatcher.Invoke(() => Add(s));
         }
     }
-    public enum WeightType { OnePerSong, OnePerAlbum, Rating, Duration }
 }
