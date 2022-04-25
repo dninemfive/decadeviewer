@@ -45,7 +45,7 @@ namespace DecadeViewer
         public override string Format(DecadeEntry de)
         {
             TimeSpan ts = TimeSpan.FromMilliseconds(de.Weight);
-            int totalHours = ts.Days * ts.Hours;
+            int totalHours = (ts.Days * 24) + ts.Hours;
             string prefix = totalHours > 0 ? $"{totalHours}:" : "";
             return $"{prefix}{ts.Minutes:00}:{ts.Seconds:00}";
         }
