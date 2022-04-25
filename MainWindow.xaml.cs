@@ -61,11 +61,11 @@ namespace DecadeViewer
                 DecadeDatabase[decade] = de;
                 DecadesInOrder.Add(decade);
                 DecadesInOrder.Sort();
-                Application.Current.Dispatcher.Invoke(() => DecadeList.Items.Insert(DecadesInOrder.IndexOf(decade), de.Grid));
+                DecadeList.Items.Insert(DecadesInOrder.IndexOf(decade), de.Grid);
             }
             foreach(DecadeEntry de in DecadeDatabase.Values)
             {
-                Application.Current.Dispatcher.Invoke(() => de.ProgressBar.Maximum = LargestDecadeWeight);
+                de.ProgressBar.Maximum = LargestDecadeWeight;
             }
         }        
         private async void Button_Profile(object sender, RoutedEventArgs e)
