@@ -9,7 +9,10 @@ namespace DecadeViewer
 {
     public abstract class WeightMethod
     {
-        public static readonly WeightMethod Song, Album, Rating, Duration;
+        public static readonly WeightMethod Song = new WeightMethod_Song(), 
+                                            Album = new WeightMethod_Album(), 
+                                            Rating = new WeightMethod_Rating(), 
+                                            Duration = new WeightMethod_Duration();
         public static readonly List<WeightMethod> AllMethods = new() { Song, Album, Duration, Rating };
         public virtual string Name { get; }
         public override string ToString() => Name;

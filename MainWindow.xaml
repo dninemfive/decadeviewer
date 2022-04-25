@@ -15,12 +15,14 @@
             </Grid.RowDefinitions>
             <TextBox Name="FolderEntry" Grid.Row="0" Text="C:/Users/dninemfive/Music/Files/" HorizontalAlignment="Center"/>
             <Button Click="Button_Profile" Grid.Row="1" Content="Click" MaxWidth="100"/>
-            <ComboBox Name="WeightDropdown" Grid.Row="2" MaxWidth="100"/>
+            <ComboBox Name="WeightDropdown" Grid.Row="2" MaxWidth="100">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </Grid>
-        <ScrollViewer>
-            <ListView Name="DecadeList" MinWidth="450">
-                
-            </ListView>
-        </ScrollViewer>
+        <ListView Name="DecadeList"/>
     </Grid>
 </Window>

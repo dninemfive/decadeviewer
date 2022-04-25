@@ -28,7 +28,7 @@ namespace DecadeViewer
             Weight += weight;
             SongCount++;
         }
-        public string WeightFormatted => MainWindow.Instance.WeightFormat(Weight);
+        public string WeightFormatted => MainWindow.Instance.WeightMethod.Format(this);
         TextBlock DecadeLabel, SongCountLabel;
         public ProgressBar ProgressBar { get; private set; } = null;
         public Grid Grid { get; private set; } = new() { HorizontalAlignment = HorizontalAlignment.Stretch };

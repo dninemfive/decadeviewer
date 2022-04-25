@@ -29,7 +29,7 @@ namespace DecadeViewer
     {
         readonly Dictionary<string, DecadeEntry> DecadeDatabase = new();
         readonly List<string> DecadesInOrder = new();
-        WeightMethod WeightMethod => WeightDropdown.SelectedItem as WeightMethod;
+        public WeightMethod WeightMethod => WeightDropdown.SelectedItem as WeightMethod;
         public static MainWindow Instance { get; private set; }
         public double LargestDecadeWeight => DecadeDatabase.Values.Select(x => x.Weight).Max();
         public MainWindow()
