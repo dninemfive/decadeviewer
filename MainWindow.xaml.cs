@@ -37,13 +37,7 @@ namespace DecadeViewer
             InitializeComponent();
             Instance = this;
             WeightDropdown.ItemsSource = WeightMethod.AllMethods;
-        }
-        public static string Decade(TagLib.File file)
-        {
-            uint year = file.Tag.Year;
-            if (year == 0) return "uncategorized ";
-            return $"{year / 10}0s ";
-        }
+        }        
         public void Add(string filePath)
         {
             TagLib.File file;
@@ -56,7 +50,7 @@ namespace DecadeViewer
                 _ = e;
                 return;
             }
-            string decade = Decade(file);
+            string decade = file.Decade();
             double weight = WeightMethod.Weight(file);
             if (DecadeDatabase.ContainsKey(decade))
             {
@@ -73,31 +67,7 @@ namespace DecadeViewer
             {
                 Application.Current.Dispatcher.Invoke(() => de.ProgressBar.Maximum = LargestDecadeWeight);
             }
-        }
-        // wish i didn't have to copy and paste this code everywhere lmao
-        public static IEnumerable<string> AllFilesRecursive(string path)
-        {
-            // https://stackoverflow.com/questions/3835633/wrap-an-ienumerable-and-catch-exceptions/34745417
-            using var enumerator = Directory.EnumerateDirectories(path, "*", SearchOption.AllDirectories).GetEnumerator();
-            bool next = true;
-            while (next)
-            {
-                try
-                {
-                    next = enumerator.MoveNext();
-                }
-                catch (Exception e)
-                {
-                    _ = e;
-                }
-                if (next)
-                {
-                    foreach (string file in Directory.EnumerateFiles(enumerator.Current)) yield return file;
-                }
-            }
-            foreach (string file in Directory.EnumerateFiles(path)) yield return file;
-        }
-
+        }        
         private async void Button_Profile(object sender, RoutedEventArgs e)
         {
             string path = FolderEntry.Text;
@@ -106,7 +76,7 @@ namespace DecadeViewer
         }
         private void ProfileInternal(string path)
         {
-            foreach (string s in AllFilesRecursive(path)) Application.Current.Dispatcher.Invoke(() => Add(s));
+            foreach (string s in path.AllFilesRecursive()) Application.Current.Dispatcher.Invoke(() => Add(s));
         }
     }
 }
