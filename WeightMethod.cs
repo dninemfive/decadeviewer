@@ -32,7 +32,7 @@ namespace DecadeViewer
         public override double Weight(TagLib.File file)
         {
             double result = 0;
-            if (Albums.Contains((file.Tag.Album, file.Tag.JoinedAlbumArtists))) result = 1;
+            if (!Albums.Contains((file.Tag.Album, file.Tag.JoinedAlbumArtists))) result = 1;
             Albums.Add((file.Tag.Album, file.Tag.JoinedAlbumArtists));
             return result;
         }
