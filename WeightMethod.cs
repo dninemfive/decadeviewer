@@ -10,10 +10,9 @@ namespace DecadeViewer
     public abstract class WeightMethod
     {
         public static readonly WeightMethod Song = new WeightMethod_Song(), 
-                                            Album = new WeightMethod_Album(), 
-                                            Rating = new WeightMethod_Rating(), 
+                                            Album = new WeightMethod_Album(),
                                             Duration = new WeightMethod_Duration();
-        public static readonly List<WeightMethod> AllMethods = new() { Song, Album, Duration, Rating };
+        public static readonly List<WeightMethod> AllMethods = new() { Song, Album, Duration };
         public virtual string Name { get; }
         public override string ToString() => Name;
         public abstract double Weight(TagLib.File file);
@@ -53,8 +52,13 @@ namespace DecadeViewer
     public class WeightMethod_Rating : WeightMethod
     {
         public override string Name => "Rating";
-        // todo: check for other ways of tracking ratings and account for those
-        public override double Weight(File file) => file.Tag is TagLib.Id3v2.Tag id3v2 ? TagLib.Id3v2.PopularimeterFrame.Get(id3v2, default, false).Rating : 0;
+        public override double Weight(File file)
+        {
+            // this is way harder than i thought wtf
+            // todo: figure out wtf (i just want to read <RATING> as displayed in fb2k,
+            //       but with private frames i'd have to parse a ByteVector which is a pita...
+            throw new NotImplementedException(); 
+        }
         public override string Format(DecadeEntry de) => $"{(de.Weight / de.SongCount):P2}";
     }
 }
