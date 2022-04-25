@@ -29,7 +29,6 @@ namespace DecadeViewer
     {
         readonly Dictionary<string, DecadeEntry> DecadeDatabase = new();
         readonly List<string> DecadesInOrder = new();
-        readonly HashSet<(string album, string albumArtist)> Albums = new();
         WeightType WeightType => (WeightType)WeightDropdown.SelectedItem;
         public static MainWindow Instance { get; private set; }
         public double LargestDecadeWeight => DecadeDatabase.Values.Select(x => x.Weight).Max();
@@ -44,32 +43,6 @@ namespace DecadeViewer
             uint year = file.Tag.Year;
             if (year == 0) return "uncategorized ";
             return $"{year / 10}0s ";
-        }
-        public double Weight(TagLib.File file)
-        {
-            return WeightType switch
-            {
-                WeightType.OnePerAlbum => Albums.Contains((file.Tag.Album, file.Tag.JoinedAlbumArtists)) ? 1 : 0,
-                WeightType.Rating => file.Tag is TagLib.Id3v2.Tag id3v2 ? TagLib.Id3v2.PopularimeterFrame.Get(id3v2, default, false).Rating : 0,
-                WeightType.Duration => file.Properties.Duration.TotalMilliseconds,
-                _ => 1
-            };
-        }
-        public string WeightFormat(double weight, int songCount)
-        {
-            return WeightType switch
-            {
-                WeightType.Duration => FormattedMilliseconds(weight),
-                WeightType.Rating => $"{weight/songCount}",
-                _ => $"{(int)weight}"
-            };
-        }
-        public static string FormattedMilliseconds(double ms)
-        {
-            TimeSpan ts = TimeSpan.FromMilliseconds(ms);
-            int totalHours = ts.Days * ts.Hours;
-            string prefix = totalHours > 0 ? $"{totalHours}:" : "";
-            return $"{prefix}{ts.Minutes:00}:{ts.Seconds:00}";
         }
         public void Add(string filePath)
         {

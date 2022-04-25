@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace DecadeViewer
 {
-    class DecadeEntry : UserControl
+    public class DecadeEntry : UserControl
     {
         public string Decade { get; private set; }  = null;
         private double _weight = 1;
