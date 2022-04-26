@@ -112,7 +112,7 @@ namespace DecadeViewer
             {
                 Padding = UIResources.Padding,
                 Text = WeightFormatted, 
-                HorizontalAlignment = HorizontalAlignment.Right,
+                HorizontalAlignment = HorizontalAlignment.Left,
                 Foreground = UIResources.TextColor,
             };
             Grid.SetColumn(WeightLabel, 2);
