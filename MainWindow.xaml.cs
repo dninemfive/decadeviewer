@@ -91,7 +91,12 @@ namespace DecadeViewer
                 DecadeDatabase[decade] = de;
                 DecadesInOrder.Add(decade);
                 DecadesInOrder.Sort();
-                DecadeList.Items.Insert(DecadesInOrder.IndexOf(decade), de.Grid);
+                DecadeList.RowDefinitions.Add(new());
+                foreach (UIElement el in de.Components) DecadeList.Children.Add(el);
+                for(int i = 0; i < DecadesInOrder.Count; i++)
+                {
+                    foreach (UIElement el in DecadeDatabase[DecadesInOrder[i]].Components) Grid.SetRow(el, i);
+                }
             }
             foreach(DecadeEntry de in DecadeDatabase.Values)
             {

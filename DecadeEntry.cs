@@ -62,9 +62,17 @@ namespace DecadeViewer
         /// </summary>
         public ProgressBar ProgressBar { get; private set; } = null;
         /// <summary>
-        /// The UI element which holds the other elements as a single unit.
+        /// Each of the component elements, each in one column of the main window's grid.
         /// </summary>
-        public Grid Grid { get; private set; } = new() { HorizontalAlignment = HorizontalAlignment.Stretch };
+        public IEnumerable<UIElement> Components
+        {
+            get
+            {
+                yield return DecadeLabel;
+                yield return ProgressBar;
+                yield return WeightLabel;
+            }
+        }
         /// <summary>
         /// Creates a new <c>DecadeEntry</c> and corresponding UI elements.
         /// </summary>
@@ -81,37 +89,35 @@ namespace DecadeViewer
         /// </summary>
         private void ConstructorInternal()
         {
-            DecadeLabel = new() { Padding = new(8), 
-                                  Text = Decade, 
-                                  HorizontalAlignment = HorizontalAlignment.Right,
-                                  Foreground = Colors.TextColor
-                                };
+            DecadeLabel = new() 
+            {                 
+                Text = Decade, 
+                HorizontalAlignment = HorizontalAlignment.Right,
+                Padding = UIResources.Padding,
+                Foreground = UIResources.TextColor
+            };
             Grid.SetColumn(DecadeLabel, 0);
-            Grid.Children.Add(DecadeLabel);
 
-            WeightLabel = new() { Padding = new(8),
-                                  Text = WeightFormatted, 
-                                  HorizontalAlignment = HorizontalAlignment.Right,
-                                  Foreground = Colors.TextColor
-                                };
-            Grid.SetColumn(WeightLabel, 2);
-            Grid.Children.Add(WeightLabel);
-
-            ProgressBar = new() { Value = 1, 
-                                  Maximum = 1000,
-                                  Background = Colors.ForegroundColor,
-                                  Foreground = Colors.ProgressBarColor
-                                };
+            ProgressBar = new()
+            {
+                Value = 1,
+                Maximum = 1000,
+                Margin = new(2),
+                Background = UIResources.ForegroundColor,
+                Foreground = UIResources.ProgressBarColor
+            };
             Grid.SetColumn(ProgressBar, 1);
-            Grid.Children.Add(ProgressBar);
 
-            // you can't reuse column definition objects.
-            // ...
-            Grid.ColumnDefinitions.Add(new() { Width = new(1,  GridUnitType.Star), MinWidth = 100 });
-            // i've been lied to :gone:
-            // genuinely why tf won't the progress bar fill tho
-            Grid.ColumnDefinitions.Add(new() { Width = GridLength.Auto, MinWidth = 800 });
-            Grid.ColumnDefinitions.Add(new() { Width = new(1,  GridUnitType.Star), MinWidth = 100 });
+            WeightLabel = new() 
+            {
+                Padding = UIResources.Padding,
+                Text = WeightFormatted, 
+                HorizontalAlignment = HorizontalAlignment.Right,
+                Foreground = UIResources.TextColor,
+            };
+            Grid.SetColumn(WeightLabel, 2);
+
+            
         }
     }
 }

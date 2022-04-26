@@ -24,6 +24,12 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
         </Grid>
-        <ListView Name="DecadeList" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderBrush="Transparent" MinWidth="1000"/>
+        <Grid Name="DecadeList" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="40" Background="Transparent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+        </Grid>
     </Grid>
 </Window>
