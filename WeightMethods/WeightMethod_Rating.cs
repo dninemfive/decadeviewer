@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace DecadeViewer
 {
-    public class WeightMethod_Rating : WeightMethod
+    /// <summary>
+    /// Non-functional <see cref="WeightMethod"/>. Would in theory weight the decade according to each song's rating and display the average rating per decade.
+    /// </summary>
+    class WeightMethod_Rating : WeightMethod
     {
         public override string Name => "Rating";
         public override double Weight(TagLib.File file)
@@ -16,6 +19,6 @@ namespace DecadeViewer
             //       but with private frames i'd have to parse a ByteVector which is a pita...
             throw new NotImplementedException();
         }
-        public override string Format(DecadeEntry de) => $"{(de.Weight / de.SongCount):P2}";
+        public override string Format(DecadeEntry decadeEntry) => $"{(decadeEntry.Weight / decadeEntry.SongCount):P2}";
     }
 }
