@@ -9,13 +9,13 @@
     <Grid>
         <Grid Name="ButtonHolder" Panel.ZIndex="1" VerticalAlignment="Center">
             <Grid.RowDefinitions>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="25"/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
-            <TextBox Name="FolderEntry" Grid.Row="0" Text="C:/Users/dninemfive/Music/Files/" HorizontalAlignment="Center"/>
-            <Button Click="Button_Profile" Grid.Row="1" Content="Click" MaxWidth="100"/>
-            <ComboBox Name="WeightDropdown" Grid.Row="2" MaxWidth="100">
+            <TextBox Name="FolderEntry" Grid.Row="0" Text="C:/Users/dninemfive/Music/Files/" HorizontalAlignment="Center" Height="20"/>
+            <Button Click="Button_Profile" Grid.Row="1" Content="Click" HorizontalAlignment="Center" MinWidth="100" Height="20"/>
+            <ComboBox Name="WeightDropdown" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="100">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Name}"/>
@@ -23,6 +23,6 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
         </Grid>
-        <ListView Name="DecadeList"/>
+        <ListView Name="DecadeList" HorizontalAlignment="Center" VerticalAlignment="Center" BorderBrush="Transparent" MinWidth="1000"/>
     </Grid>
 </Window>
