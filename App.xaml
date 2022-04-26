@@ -4,6 +4,10 @@
              xmlns:local="clr-namespace:DecadeViewer"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <SolidColorBrush x:Key="TextColor" Color="#EEEEEE"/>
+        <!-- hello, Asticky -->
+        <SolidColorBrush x:Key="ForegroundColor" Color="#AAAAAA"/>
+        <SolidColorBrush x:Key="BackgroundColor" Color="#222222"/>
+        <SolidColorBrush x:Key="ProgressBarColor" Color="#FF7700"/>
     </Application.Resources>
 </Application>

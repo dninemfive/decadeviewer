@@ -55,6 +55,7 @@ namespace DecadeViewer
             InitializeComponent();
             Instance = this;
             WeightDropdown.ItemsSource = WeightMethod.AllMethods;
+            WeightDropdown.SelectedItem = WeightMethod.Song;
         }
         /// <summary>
         /// Adds a song, identified by its path, to the <see cref="DecadeDatabase"/>. If no valid 
